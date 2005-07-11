@@ -11,7 +11,7 @@ Source0:	http://www.prelude-ids.org/download/releases/%{name}-%{version}-%{_rc}.
 URL:		http://www.prelude-ids.org/
 BuildRequires:	perl-devel
 BuildRequires:	python-devel
-BuildRequires:	gnutls-devel >= 1.0.17
+BuildRequires:	gnutls-devel >= 1.2.5
 BuildRequires:	gtk-doc
 BuildRequires:	bison
 BuildRequires:	flex
