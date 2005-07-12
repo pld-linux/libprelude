@@ -39,6 +39,7 @@ The Prelude Library.
 Summary:	Header files and develpment documentation for libprelude
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
+Requires:	gnutls-devel
 
 %description devel
 Header files and develpment documentation for libprelude.
