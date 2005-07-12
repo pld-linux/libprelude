@@ -3,7 +3,7 @@ Summary:	The Prelude Library
 Name:		libprelude
 %define	_rc	rc9
 Version:	0.9.0
-Release:	0.%{_rc}.1
+Release:	0.%{_rc}.2
 License:	GPL
 Group:		Libraries
 Source0:	http://www.prelude-ids.org/download/releases/%{name}-%{version}-%{_rc}.tar.gz
