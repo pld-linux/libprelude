@@ -1,5 +1,5 @@
 %include	/usr/lib/rpm/macros.perl
-Summary:	The Prelude Library
+Summary:	The Prelude library
 Summary(pl):	Biblioteka Prelude
 Name:		libprelude
 %define	_rc	rc9
@@ -20,7 +20,7 @@ BuildRequires:	rpm-perlprov
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-The Prelude Library is a collection of generic functions providing
+The Prelude library is a collection of generic functions providing
 communication between the Prelude Hybrid IDS suite components. It
 provides a convenient interface for sending alerts to Prelude Manager
 with transparent SSL, failover and replication support, asynchronous
@@ -40,12 +40,12 @@ dostêpn± z zarz±dcy) oraz ogólne API wtyczek. Pozwala ³atwo zamieniæ
 ulubiony program zwi±zany z bezpieczeñstwem na czujnik Prelude.
 
 %package libs
-Summary:	The Prelude Library
+Summary:	The Prelude library
 Summary(pl):	Biblioteka Prelude
 Group:		Libraries
 
 %description libs
-The Prelude Library.
+The Prelude library.
 
 %description libs -l pl
 Biblioteka Prelude.
@@ -118,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 cd bindings/perl && %{__perl} Makefile.PL \
-        INSTALLDIRS=vendor
+	INSTALLDIRS=vendor
 cd ../..
 %{__make} -C bindings/perl install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -129,7 +129,7 @@ cd ../..
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	libs   -p /sbin/ldconfig
+%post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
 %files
