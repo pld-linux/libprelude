@@ -2,13 +2,12 @@
 Summary:	The Prelude library
 Summary(pl):	Biblioteka Prelude
 Name:		libprelude
-%define	_rc	rc9
 Version:	0.9.0
-Release:	0.%{_rc}.2
+Release:	1
 License:	GPL
 Group:		Libraries
-Source0:	http://www.prelude-ids.org/download/releases/%{name}-%{version}-%{_rc}.tar.gz
-# Source0-md5:	924e4ccd0ca3bb57e16f9ead2a20d942
+Source0:	http://www.prelude-ids.org/download/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	95fe75b77b8be8992bc87274d6e2283a
 URL:		http://www.prelude-ids.org/
 BuildRequires:	bison
 BuildRequires:	flex
@@ -98,7 +97,7 @@ libprelude Python bindings.
 Dowi±zania Pythona dla libprelude.
 
 %prep
-%setup -q -n %{name}-%{version}-%{_rc}
+%setup -q
 
 %build
 %configure \
@@ -108,6 +107,10 @@ Dowi±zania Pythona dla libprelude.
 	--enable-python \
 	--enable-gtk-doc \
 	--with-html-dir=%{_gtkdocdir}/libprelude
+
+# first make the perl makefile otherwise with jobserver strange things happen:
+# Makefile out-of-date with respect to Makefile.PL
+%{__make} -C bindings perl/Makefile
 
 %{__make}
 
