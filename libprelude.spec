@@ -2,12 +2,12 @@
 Summary:	The Prelude library
 Summary(pl):	Biblioteka Prelude
 Name:		libprelude
-Version:	0.9.7.2
+Version:	0.9.8
 Release:	1
 License:	GPL
 Group:		Libraries
 Source0:	http://www.prelude-ids.org/download/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	03be67cb83d8b6a3fe265222805a9c50
+# Source0-md5:	d46527e7b036d20c3cc72c887486d773
 URL:		http://www.prelude-ids.org/
 BuildRequires:	bison
 BuildRequires:	flex
