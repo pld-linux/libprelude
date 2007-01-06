@@ -6,7 +6,7 @@ Summary:	The Prelude library
 Summary(pl):	Biblioteka Prelude
 Name:		libprelude
 Version:	0.9.12
-Release:	1
+Release:	2
 License:	GPL
 Group:		Libraries
 Source0:	http://www.prelude-ids.org/download/releases/%{name}-%{version}.tar.gz
@@ -125,6 +125,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# are generating wrong dependencies (and are not needed anyway)
+find $RPM_BUILD_ROOT -iregex .*.la -exec rm {} \;
+
 %if %{with perl}
 cd bindings/perl && %{__perl} Makefile.PL \
 	INSTALLDIRS=vendor
@@ -156,8 +159,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/prelude-adduser
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-# needed in normal operational
-%{_libdir}/lib*.la
 
 %files devel
 %defattr(644,root,root,755)
