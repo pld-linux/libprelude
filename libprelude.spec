@@ -1,6 +1,8 @@
+#
+# Conditional build:
 %bcond_without	perl
 %bcond_without	python		# required by prewikka
-
+#
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Prelude library
 Summary(pl):	Biblioteka Prelude
