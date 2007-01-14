@@ -1,7 +1,7 @@
 #
 # Conditional build:
-%bcond_without	perl
-%bcond_without	python		# required by prewikka
+%bcond_without	perl	# don't build perl bindings
+%bcond_without	python	# don't build python bindings (required by prewikka)
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Prelude library
