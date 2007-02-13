@@ -5,7 +5,7 @@
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Prelude library
-Summary(pl.UTF-8):   Biblioteka Prelude
+Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
 Version:	0.9.12.2
 Release:	1
@@ -45,7 +45,7 @@ ulubiony program związany z bezpieczeństwem na czujnik Prelude.
 
 %package libs
 Summary:	The Prelude library
-Summary(pl.UTF-8):   Biblioteka Prelude
+Summary(pl.UTF-8):	Biblioteka Prelude
 Group:		Libraries
 
 %description libs
@@ -56,7 +56,7 @@ Biblioteka Prelude.
 
 %package devel
 Summary:	Header files and development documentation for libprelude
-Summary(pl.UTF-8):   Pliki nagłówkowe i dokumentacja programistyczna dla libprelude
+Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja programistyczna dla libprelude
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	gnutls-devel
@@ -69,7 +69,7 @@ Pliki nagłówkowe i dokumentacja programistyczna dla libprelude.
 
 %package static
 Summary:	Static libprelude library
-Summary(pl.UTF-8):   Statyczna biblioteka libprelude
+Summary(pl.UTF-8):	Statyczna biblioteka libprelude
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -81,7 +81,7 @@ Statyczna biblioteka libprelude.
 
 %package -n perl-libprelude
 Summary:	libprelude Perl bindings
-Summary(pl.UTF-8):   Dowiązania Perla do libprelude
+Summary(pl.UTF-8):	Dowiązania Perla do libprelude
 Group:		Development/Languages/Perl
 
 %description -n perl-libprelude
@@ -92,7 +92,7 @@ Dowiązania Perla dla libprelude.
 
 %package -n python-libprelude
 Summary:	libprelude Python bindings
-Summary(pl.UTF-8):   Dowiązania Pythona dla libprelude
+Summary(pl.UTF-8):	Dowiązania Pythona dla libprelude
 Group:		Development/Languages/Python
 
 %description -n python-libprelude
