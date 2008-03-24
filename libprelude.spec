@@ -7,20 +7,29 @@
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
-Version:	0.9.12.2
-Release:	3
-License:	GPL
+Version:	0.9.16.2
+Release:	1
+License:	GPL v2 or commercial
 Group:		Libraries
 Source0:	http://www.prelude-ids.org/download/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	4636cf21c3e96adbd9463138fb49f401
+# Source0-md5:	1dcffc4149bd444ba977c5d1d8573792
+Patch0:		%{name}-libdir.patch
 URL:		http://www.prelude-ids.org/
+BuildRequires:	autoconf >= 2.59
+BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	gnutls-devel >= 1.0.17
-BuildRequires:	gtk-doc
+BuildRequires:	gtk-doc >= 1.0
+BuildRequires:	libgcrypt-devel >= 1.1.94
+BuildRequires:	libltdl-devel
+BuildRequires:	libtool
 %{?with_perl:BuildRequires:	perl-devel}
-%{?with_python:BuildRequires:	python-devel}
+%{?with_python:BuildRequires:	python-devel >= 1:2.5}
 BuildRequires:	rpm-perlprov
+BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.219
+Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -47,6 +56,8 @@ ulubiony program związany z bezpieczeństwem na czujnik Prelude.
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Group:		Libraries
+Requires:	gnutls >= 1.0.17
+Requires:	libgcrypt >= 1.1.94
 
 %description libs
 The Prelude library.
@@ -59,7 +70,9 @@ Summary:	Header files and development documentation for libprelude
 Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja programistyczna dla libprelude
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	gnutls-devel
+Requires:	gnutls-devel >= 1.0.17
+Requires:	libgcrypt-devel >= 1.1.94
+Requires:	libltdl-devel
 
 %description devel
 Header files and development documentation for libprelude.
@@ -83,6 +96,7 @@ Statyczna biblioteka libprelude.
 Summary:	libprelude Perl bindings
 Summary(pl.UTF-8):	Dowiązania Perla do libprelude
 Group:		Development/Languages/Perl
+Requires:	%{name}-libs = %{version}-%{release}
 
 %description -n perl-libprelude
 libprelude Perl bindings.
@@ -94,6 +108,7 @@ Dowiązania Perla dla libprelude.
 Summary:	libprelude Python bindings
 Summary(pl.UTF-8):	Dowiązania Pythona dla libprelude
 Group:		Development/Languages/Python
+Requires:	%{name}-libs = %{version}-%{release}
 
 %description -n python-libprelude
 libprelude Python bindings.
@@ -103,21 +118,21 @@ Dowiązania Pythona dla libprelude.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
+%{__libtoolize}
+%{__aclocal} -I m4 -I libmissing/m4
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
-	--enable-shared \
 	--enable-static \
 	--enable-gtk-doc \
 	--with%{!?with_perl:out}-perl \
 	--with%{!?with_python:out}-python \
-	--with-html-dir=%{_gtkdocdir}/libprelude
-
-# first make the perl makefile otherwise with jobserver strange things happen:
-# Makefile out-of-date with respect to Makefile.PL
-%if %{with perl}
-%{__make} -C bindings perl/Makefile.PL
-%endif
+	--with-html-dir=%{_gtkdocdir}/libprelude \
+	--with-perl-installdirs=vendor
 
 %{__make}
 
@@ -127,17 +142,10 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%if %{with perl}
-cd bindings/perl && %{__perl} Makefile.PL \
-	INSTALLDIRS=vendor
-cd ../..
-%{__make} -C bindings/perl install \
-	DESTDIR=$RPM_BUILD_ROOT
-%endif
-
 %if %{with python}
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
+%py_postclean
 %endif
 
 %clean
@@ -148,42 +156,46 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog NEWS README
+%doc AUTHORS ChangeLog LICENSE.README NEWS README
+%attr(755,root,root) %{_bindir}/prelude-adduser
+%attr(755,root,root) %{_bindir}/prelude-admin
 %dir %{_sysconfdir}/prelude
 %dir %{_sysconfdir}/prelude/default
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/prelude/default/*.conf
 %dir %{_sysconfdir}/prelude/profile
+%{_mandir}/man1/prelude-admin.1*
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/prelude-adduser
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
+%attr(755,root,root) %{_libdir}/libprelude.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libprelude.so.2
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/libprelude-config
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
+%attr(755,root,root) %{_libdir}/libprelude.so
+%{_libdir}/libprelude.la
 %{_includedir}/libprelude
-%{_aclocaldir}/*.m4
+%{_aclocaldir}/libprelude.m4
 %{_gtkdocdir}/libprelude
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libprelude.a
 
 %if %{with perl}
 %files -n perl-libprelude
 %defattr(644,root,root,755)
-%dir %{perl_vendorarch}/auto/Prelude
-%attr(755,root,root) %{perl_vendorarch}/auto/Prelude/*.so
-%{perl_vendorarch}/auto/Prelude/*.bs
 %{perl_vendorarch}/Prelude.pm
+%dir %{perl_vendorarch}/auto/Prelude
+%{perl_vendorarch}/auto/Prelude/Prelude.bs
+%attr(755,root,root) %{perl_vendorarch}/auto/Prelude/Prelude.so
 %endif
 
 %if %{with python}
 %files -n python-libprelude
 %defattr(644,root,root,755)
-%attr(755,root,root) %{py_sitedir}/*.so
-%{py_sitedir}/*.py[co]
+%attr(755,root,root) %{py_sitedir}/_prelude.so
+%{py_sitedir}/prelude.py[co]
+%{py_sitedir}/prelude-*.egg-info
 %endif
