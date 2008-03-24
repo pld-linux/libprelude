@@ -1,0 +1,27 @@
+--- libprelude-0.9.16.2/configure.in.orig	2008-01-23 15:08:10.000000000 +0100
++++ libprelude-0.9.16.2/configure.in	2008-03-24 16:06:00.481090289 +0100
+@@ -295,8 +295,10 @@
+ if test x$with_system_ltdl != xno; then
+ 	CPPFLAGS_bkp=$CPPFLAGS
+ 	LDFLAGS_bkp=$LIBS
++	if test -n "$with_system_ltdl" -a "$with_system_ltdl" != "yes"; then
+ 	CPPFLAGS="-I$with_system_ltdl/include"
+ 	LDFLAGS="-L$with_system_ltdl/lib"
++	fi
+ 
+         AC_CHECK_HEADER(ltdl.h, AC_CHECK_LIB(ltdl, lt_dlopen, have_system_ltdl=yes))
+ 	
+@@ -313,8 +315,13 @@
+         AC_CONFIG_SUBDIRS(libltdl)
+ else
+         with_ltdl_type="System"
++	if test -n "$with_system_ltdl" -a "$with_system_ltdl" != "yes"; then
+         INCLTDL="-I$with_system_ltdl/include"
+         LIBLTDL="-L$with_system_ltdl/lib -lltdl"
++	else
++        INCLTDL=
++        LIBLTDL="-lltdl"
++	fi
+ fi
+ 
+ AM_CONDITIONAL(HAVE_SYSTEM_LIBLTDL, test x$have_system_ltdl = xyes)
