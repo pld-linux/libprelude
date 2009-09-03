@@ -7,13 +7,13 @@
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
-Version:	0.9.21.3
-Release:	2
+Version:	0.9.24.1
+Release:	0.1
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: http://www.prelude-ids.com/developpement/telechargement/index.html
 Source0:	http://www.prelude-ids.com/download/releases/libprelude/%{name}-%{version}.tar.gz
-# Source0-md5:	1d9b16d2d7b6d64c52daae23076c2673
+# Source0-md5:	07868b3d54fa8243455a27da6b87239c
 URL:		http://www.prelude-ids.com/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
@@ -48,9 +48,9 @@ komunikację pomiędzy komponentami zestawu Prelude Hybrid IDS.
 Dostarcza wygodny interfejs do wysyłania alarmów do zarządcy Prelude z
 przezroczystą obsługę SSL, failover i replikacji, interfejsy do
 zdarzeń asynchronicznych i zegarów, abstrakcyjne API konfiguracyjne
-(obsługujące linię poleceń, linię konfiguracji i konfigurację
-dostępną z zarządcy) oraz ogólne API wtyczek. Pozwala łatwo zamienić
-ulubiony program związany z bezpieczeństwem na czujnik Prelude.
+(obsługujące linię poleceń, linię konfiguracji i konfigurację dostępną
+z zarządcy) oraz ogólne API wtyczek. Pozwala łatwo zamienić ulubiony
+program związany z bezpieczeństwem na czujnik Prelude.
 
 %package libs
 Summary:	The Prelude library
@@ -177,6 +177,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/libprelude
 %{_aclocaldir}/libprelude.m4
 %{_gtkdocdir}/libprelude
+%{_pkgconfigdir}/libprelude.pc
 
 %files static
 %defattr(644,root,root,755)
