@@ -1,0 +1,14 @@
+diff -ur libprelude-1.0.0/src/include/prelude-plugin.h libprelude-1.0.0.new//src/include/prelude-plugin.h
+--- libprelude-1.0.0/src/include/prelude-plugin.h	2010-03-10 13:18:20.000000000 +0100
++++ libprelude-1.0.0.new//src/include/prelude-plugin.h	2011-08-01 10:45:41.723988238 +0200
+@@ -61,9 +61,9 @@
+  */
+ #ifdef PRELUDE_APPLICATION_USE_LIBTOOL2
+ # define lt_preloaded_symbols lt__PROGRAM__LTX_preloaded_symbols
+-#endif
+ 
+ extern const void *lt_preloaded_symbols[];
++#endif
+ 
+ #define PRELUDE_PLUGIN_SET_PRELOADED_SYMBOLS()         \
+         prelude_plugin_set_preloaded_symbols(lt_preloaded_symbols)
