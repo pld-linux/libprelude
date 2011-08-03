@@ -7,13 +7,14 @@
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
-Version:	0.9.24.1
-Release:	3
+Version:	1.0.0
+Release:	1
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: http://www.prelude-ids.com/developpement/telechargement/index.html
 Source0:	http://www.prelude-ids.com/download/releases/libprelude/%{name}-%{version}.tar.gz
-# Source0-md5:	07868b3d54fa8243455a27da6b87239c
+# Source0-md5:	a5bb76538d240e5fac5f6ab0b7fabfe5
+Patch0:		%{name}-libtool.patch
 URL:		http://www.prelude-ids.com/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
@@ -29,6 +30,7 @@ BuildRequires:	libtool
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
+%{?with_perl:BuildRequires: swig-perl}
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -118,6 +120,7 @@ Dowiązania Pythona dla libprelude.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -167,13 +170,17 @@ rm -rf $RPM_BUILD_ROOT
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libprelude.so.*.*.*
+%attr(755,root,root) %{_libdir}/libpreludecpp.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libprelude.so.2
+%attr(755,root,root) %ghost %{_libdir}/libpreludecpp.so.0
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/libprelude-config
 %attr(755,root,root) %{_libdir}/libprelude.so
+%attr(755,root,root) %{_libdir}/libpreludecpp.so
 %{_libdir}/libprelude.la
+%{_libdir}/libpreludecpp.la
 %{_includedir}/libprelude
 %{_aclocaldir}/libprelude.m4
 %{_gtkdocdir}/libprelude
@@ -182,6 +189,7 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libprelude.a
+%{_libdir}/libpreludecpp.a
 
 %if %{with perl}
 %files -n perl-libprelude
@@ -196,6 +204,9 @@ rm -rf $RPM_BUILD_ROOT
 %files -n python-libprelude
 %defattr(644,root,root,755)
 %attr(755,root,root) %{py_sitedir}/_prelude.so
+%attr(755,root,root) %{py_sitedir}/_PreludeEasy.so
 %{py_sitedir}/prelude.py[co]
+%{py_sitedir}/PreludeEasy.py[co]
 %{py_sitedir}/prelude-*.egg-info
+%{py_sitedir}/PreludeEasy-*.egg-info
 %endif
