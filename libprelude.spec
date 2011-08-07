@@ -1,7 +1,9 @@
 #
 # Conditional build:
-%bcond_without	perl	# don't build perl bindings
-%bcond_without	python	# don't build python bindings (required by prewikka)
+%bcond_without	lua	# Lua (5.1) bindings
+%bcond_without	perl	# Perl bindings
+%bcond_without	python	# Python bindings (required by prewikka)
+%bcond_with	ruby	# Ruby bindings (not ready for 1.9 yet)
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Prelude library
@@ -15,6 +17,7 @@ Group:		Libraries
 Source0:	http://www.prelude-ids.com/download/releases/libprelude/%{name}-%{version}.tar.gz
 # Source0-md5:	a5bb76538d240e5fac5f6ab0b7fabfe5
 Patch0:		%{name}-libtool.patch
+Patch1:		%{name}-ruby.patch
 URL:		http://www.prelude-ids.com/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
@@ -23,14 +26,19 @@ BuildRequires:	flex
 BuildRequires:	gnutls-devel >= 1.0.17
 BuildRequires:	gtk-doc >= 1.0
 BuildRequires:	libgcrypt-devel >= 1.1.94
-BuildRequires:	libltdl-devel
-BuildRequires:	libtool
+BuildRequires:	libltdl-devel >= 2:2.0
+BuildRequires:	libtool >= 2:2.0
+%{?with_lua:BuildRequires:	lua51-devel >= 5.1}
 %{?with_perl:BuildRequires:	perl-devel}
 %{?with_python:BuildRequires:	python-devel >= 1:2.5}
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
+%{?with_ruby:BuildRequires:	ruby-devel >= 1.8, ruby-devel < 1.9}
+BuildRequires:	sed >= 4.0
 %{?with_perl:BuildRequires: swig-perl}
+%{?with_python:BuildRequires: swig-python}
+%{?with_ruby:BuildRequires: swig-ruby}
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -94,6 +102,18 @@ Static libprelude library.
 %description static -l pl.UTF-8
 Statyczna biblioteka libprelude.
 
+%package -n lua-prelude
+Summary:	libprelude Lua bindings
+Summary(pl.UTF-8):	Dowiązania języka Lua do libprelude
+Group:		Development/Languages
+Requires:	%{name} = %{version}-%{release}
+
+%description -n lua-prelude
+libprelude Lua bindings.
+
+%description -n lua-prelude -l pl.UTF-8
+Dowiązania języka Lua do libprelude.
+
 %package -n perl-libprelude
 Summary:	libprelude Perl bindings
 Summary(pl.UTF-8):	Dowiązania Perla do libprelude
@@ -121,6 +141,20 @@ Dowiązania Pythona dla libprelude.
 %prep
 %setup -q
 %patch0 -p1
+%{?with_ruby:%patch1 -p1}
+
+%if %{with python}
+# regenerate with fresh swig for gcc 4.6+
+%{__rm} bindings/python/{_PreludeEasy.cxx,PreludeEasy.py}
+%endif
+%if %{with ruby}
+# same for ruby 1.9
+sed -i -e 's,"rubyio.h","ruby/io.h",' bindings/ruby/libpreludecpp-ruby.i
+%{__rm} bindings/ruby/PreludeEasy.cxx
+# TODO: more
+%endif
+
+sed -i -e 's/lua >= 5.1/lua51 >= 5.1/' configure.in
 
 %build
 %{__libtoolize}
@@ -129,8 +163,9 @@ Dowiązania Pythona dla libprelude.
 %{__autoheader}
 %{__automake}
 %configure \
-	--enable-static \
 	--enable-gtk-doc \
+	--enable-static \
+	--with%{!?with_lua:out}-lua \
 	--with%{!?with_perl:out}-perl \
 	--with%{!?with_python:out}-python \
 	--with-html-dir=%{_gtkdocdir}/libprelude \
@@ -149,6 +184,9 @@ rm -rf $RPM_BUILD_ROOT
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 %py_postclean
 %endif
+%if %{with lua}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/PreludeEasy.{la,a}
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -163,7 +201,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/prelude-admin
 %dir %{_sysconfdir}/prelude
 %dir %{_sysconfdir}/prelude/default
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/prelude/default/*.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/prelude/default/client.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/prelude/default/global.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/prelude/default/idmef-client.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/prelude/default/tls.conf
 %dir %{_sysconfdir}/prelude/profile
 %{_mandir}/man1/prelude-admin.1*
 
@@ -191,6 +232,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libprelude.a
 %{_libdir}/libpreludecpp.a
 
+%if %{with lua}
+%files -n lua-prelude
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/PreludeEasy.so
+%endif
+
 %if %{with perl}
 %files -n perl-libprelude
 %defattr(644,root,root,755)
@@ -198,6 +245,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{perl_vendorarch}/auto/Prelude
 %{perl_vendorarch}/auto/Prelude/Prelude.bs
 %attr(755,root,root) %{perl_vendorarch}/auto/Prelude/Prelude.so
+%dir %{perl_vendorarch}/auto/PreludeEasy
+%{perl_vendorarch}/auto/PreludeEasy/PreludeEasy.bs
+%attr(755,root,root) %{perl_vendorarch}/auto/PreludeEasy/PreludeEasy.so
 %endif
 
 %if %{with python}

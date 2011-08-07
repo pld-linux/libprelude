@@ -1,0 +1,11 @@
+--- libprelude-1.0.0/m4/am_path_ruby.m4.orig	2010-01-11 12:09:42.000000000 +0100
++++ libprelude-1.0.0/m4/am_path_ruby.m4	2011-08-07 16:18:31.583033709 +0200
+@@ -100,7 +100,7 @@
+   AC_SUBST([rbexecdir], [$am_cv_ruby_rbexecdir])
+ 
+   RUBY_INCLUDES=`$RUBY -r rbconfig -e 'if Config::CONFIG[["archdir"]] then print " -I" + Config::CONFIG[["archdir"]] end
+-                                       if Config::CONFIG[["rubyhdrdir"]] then print " -I" + Config::CONFIG[["rubyhdrdir"]] end'`
++                                       if Config::CONFIG[["rubyhdrdir"]] then print " -I" + Config::CONFIG[["rubyhdrdir"]]; print " -I" + Config::CONFIG[["rubyhdrdir"]] + "/" + Config::CONFIG[["arch"]] end'`
+   AC_SUBST([RUBY_INCLUDES])
+ 
+   dnl pkgrbexecdir -- $(rbexecdir)/$(PACKAGE)
