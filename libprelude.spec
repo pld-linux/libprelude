@@ -3,7 +3,7 @@
 %bcond_without	lua	# Lua (5.1) bindings
 %bcond_without	perl	# Perl bindings
 %bcond_without	python	# Python bindings (required by prewikka)
-%bcond_with	ruby	# Ruby bindings (not ready for 1.9 yet)
+%bcond_without	ruby	# Ruby bindings
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Prelude library
@@ -34,7 +34,7 @@ BuildRequires:	libtool >= 2:2.0
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
-%{?with_ruby:BuildRequires:	ruby-devel >= 1.8, ruby-devel < 1.9}
+%{?with_ruby:BuildRequires:	ruby-devel >= 1.9}
 BuildRequires:	sed >= 4.0
 %{?with_perl:BuildRequires: swig-perl}
 %{?with_python:BuildRequires: swig-python}
@@ -103,16 +103,16 @@ Static libprelude library.
 Statyczna biblioteka libprelude.
 
 %package -n lua-prelude
-Summary:	libprelude Lua bindings
-Summary(pl.UTF-8):	Dowiązania języka Lua do libprelude
+Summary:	PreludeEasy - libprelude Lua bindings
+Summary(pl.UTF-8):	PreludeEasy - dowiązania języka Lua do libprelude
 Group:		Development/Languages
 Requires:	%{name} = %{version}-%{release}
 
 %description -n lua-prelude
-libprelude Lua bindings.
+PreludeEasy - libprelude Lua bindings.
 
 %description -n lua-prelude -l pl.UTF-8
-Dowiązania języka Lua do libprelude.
+PreludeEasy - dowiązania języka Lua do libprelude.
 
 %package -n perl-libprelude
 Summary:	libprelude Perl bindings
@@ -138,10 +138,21 @@ libprelude Python bindings.
 %description -n python-libprelude -l pl.UTF-8
 Dowiązania Pythona dla libprelude.
 
+%package -n ruby-prelude
+Summary:	PreludeEasy - libprelude Ruby bindings
+Summary(pl.UTF-8):	PreludeEasy - dowiązania języka Ruby do libprelude
+Group:		Development/Languages
+Requires:	%{name} = %{version}-%{release}
+
+%description -n ruby-prelude
+PreludeEasy - libprelude Ruby bindings.
+
+%description -n ruby-prelude -l pl.UTF-8
+PreludeEasy - dowiązania języka Ruby do libprelude.
+
 %prep
 %setup -q
 %patch0 -p1
-%{?with_ruby:%patch1 -p1}
 
 %if %{with python}
 # regenerate with fresh swig for gcc 4.6+
@@ -149,9 +160,8 @@ Dowiązania Pythona dla libprelude.
 %endif
 %if %{with ruby}
 # same for ruby 1.9
-sed -i -e 's,"rubyio.h","ruby/io.h",' bindings/ruby/libpreludecpp-ruby.i
 %{__rm} bindings/ruby/PreludeEasy.cxx
-# TODO: more
+%patch1 -p1
 %endif
 
 sed -i -e 's/lua >= 5.1/lua51 >= 5.1/' configure.in
@@ -179,13 +189,16 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%if %{with lua}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/PreludeEasy.{la,a}
+%endif
 %if %{with python}
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 %py_postclean
 %endif
-%if %{with lua}
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/PreludeEasy.{la,a}
+%if %{with ruby}
+%{__rm} $RPM_BUILD_ROOT%{ruby_sitearchdir}/PreludeEasy.{la,a}
 %endif
 
 %clean
@@ -259,4 +272,10 @@ rm -rf $RPM_BUILD_ROOT
 %{py_sitedir}/PreludeEasy.py[co]
 %{py_sitedir}/prelude-*.egg-info
 %{py_sitedir}/PreludeEasy-*.egg-info
+%endif
+
+%if %{with ruby}
+%files -n ruby-prelude
+%defattr(644,root,root,755)
+%attr(755,root,root) %{ruby_sitearchdir}/PreludeEasy.so
 %endif
