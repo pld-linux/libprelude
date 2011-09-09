@@ -10,7 +10,7 @@ Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
 Version:	1.0.0
-Release:	2
+Release:	3
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: http://www.prelude-ids.com/developpement/telechargement/index.html
