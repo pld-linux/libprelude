@@ -9,15 +9,18 @@
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
-Version:	1.0.0
-Release:	5
+Version:	1.0.1
+Release:	1
 License:	GPL v2 or commercial
 Group:		Libraries
-#Source0Download: http://www.prelude-ids.com/developpement/telechargement/index.html
-Source0:	http://www.prelude-ids.com/download/releases/libprelude/%{name}-%{version}.tar.gz
-# Source0-md5:	a5bb76538d240e5fac5f6ab0b7fabfe5
+# https://www.prelude-ids.org/projects/prelude/files
+Source0:	https://www.prelude-ids.org/attachments/download/241/%{name}-%{version}.tar.gz
+# Source0-md5:	dce1ea9f82cf436830567894e7ee622f
 Patch0:		%{name}-libtool.patch
 Patch1:		%{name}-ruby.patch
+Patch2:		%{name}-gnutls.patch
+Patch3:		%{name}-gets.patch
+Patch4:		%{name}-python.patch
 URL:		http://www.prelude-ids.com/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
@@ -37,6 +40,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
 %{?with_ruby:BuildRequires:	ruby-devel >= 1.9}
 BuildRequires:	sed >= 4.0
+BuildRequires:	trousers-devel
 %{?with_perl:BuildRequires: swig-perl}
 %{?with_python:BuildRequires: swig-python}
 %{?with_ruby:BuildRequires: swig-ruby}
@@ -226,6 +230,10 @@ PreludeEasy - dowiązania języka Ruby do libprelude.
 %{__rm} bindings/ruby/PreludeEasy.cxx
 %patch1 -p1
 %endif
+
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 sed -i -e 's/lua >= 5.1/lua51 >= 5.1/' configure.in
 
