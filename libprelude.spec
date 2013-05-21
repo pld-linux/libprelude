@@ -40,7 +40,6 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
 %{?with_ruby:BuildRequires:	ruby-devel >= 1.9}
 BuildRequires:	sed >= 4.0
-BuildRequires:	trousers-devel
 %{?with_perl:BuildRequires: swig-perl}
 %{?with_python:BuildRequires: swig-python}
 %{?with_ruby:BuildRequires: swig-ruby}
