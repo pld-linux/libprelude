@@ -1,0 +1,33 @@
+diff -ur libprelude-1.0.1.orig//m4/libgnutls-extra.m4 libprelude-1.0.1/m4/libgnutls-extra.m4
+--- libprelude-1.0.1.orig//m4/libgnutls-extra.m4	2012-04-02 09:41:15.000000000 +0000
++++ libprelude-1.0.1/m4/libgnutls-extra.m4	2012-11-08 14:05:46.160509830 +0000
+@@ -48,7 +48,6 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <gnutls/extra.h>
+ 
+ int
+ main ()
+diff -ur libprelude-1.0.1.orig//prelude-admin/prelude-admin.c libprelude-1.0.1/prelude-admin/prelude-admin.c
+--- libprelude-1.0.1.orig//prelude-admin/prelude-admin.c	2012-06-01 15:12:22.000000000 +0000
++++ libprelude-1.0.1/prelude-admin/prelude-admin.c	2012-11-08 14:05:59.160517936 +0000
+@@ -57,7 +57,6 @@
+ #include <errno.h>
+ #include <gnutls/gnutls.h>
+ #include <gnutls/x509.h>
+-#include <gnutls/extra.h>
+ 
+ #include "common.h"
+ #include "config-engine.h"
+diff -ur libprelude-1.0.1.orig//prelude-admin/server.c libprelude-1.0.1/prelude-admin/server.c
+--- libprelude-1.0.1.orig//prelude-admin/server.c	2012-06-01 15:12:22.000000000 +0000
++++ libprelude-1.0.1/prelude-admin/server.c	2012-11-08 14:06:04.057509537 +0000
+@@ -39,7 +39,6 @@
+ 
+ #include <gcrypt.h>
+ #include <gnutls/gnutls.h>
+-#include <gnutls/extra.h>
+ 
+ #include "prelude-client.h"
+ #include "prelude-error.h"
