@@ -259,11 +259,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%if %{with perl}
-# missing from make install
-[ ! -f $RPM_BUILD_ROOT%{perl_vendorarch}/PreludeEasy.pm ] || exit 1
-cp -p bindings/perl/PreludeEasy.pm $RPM_BUILD_ROOT%{perl_vendorarch}
-%endif
 %if %{with lua}
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/PreludeEasy.{la,a}
 %endif
