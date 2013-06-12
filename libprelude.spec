@@ -10,7 +10,7 @@ Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
 Version:	1.0.1
-Release:	2
+Release:	3
 License:	GPL v2 or commercial
 Group:		Libraries
 # https://www.prelude-ids.org/projects/prelude/files
@@ -243,6 +243,7 @@ sed -i -e 's/lua >= 5.1/lua51 >= 5.1/' configure.in
 %{__autoheader}
 %{__automake}
 %configure \
+	am_cv_ruby_rbexecdir=%{ruby_vendorarchdir} \
 	--enable-gtk-doc \
 	--enable-static \
 	--with%{!?with_lua:out}-lua \
@@ -253,10 +254,19 @@ sed -i -e 's/lua >= 5.1/lua51 >= 5.1/' configure.in
 
 %{__make}
 
+cd bindings/perl
+%{__make} clean
+%{__perl} Makefile.PL \
+        INSTALLDIRS=vendor \
+%{__make}
+
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+
+%{__make} -C bindings/perl install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %if %{with lua}
@@ -268,7 +278,7 @@ rm -rf $RPM_BUILD_ROOT
 %py_postclean
 %endif
 %if %{with ruby}
-%{__rm} $RPM_BUILD_ROOT%{ruby_sitearchdir}/PreludeEasy.{la,a}
+%{__rm} $RPM_BUILD_ROOT%{ruby_vendorarchdir}/PreludeEasy.{la,a}
 %endif
 
 %clean
@@ -369,5 +379,5 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with ruby}
 %files -n ruby-prelude
 %defattr(644,root,root,755)
-%attr(755,root,root) %{ruby_sitearchdir}/PreludeEasy.so
+%attr(755,root,root) %{ruby_vendorarchdir}/PreludeEasy.so
 %endif
