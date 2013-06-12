@@ -10,7 +10,7 @@ Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
 Version:	1.0.1
-Release:	3
+Release:	4
 License:	GPL v2 or commercial
 Group:		Libraries
 # https://www.prelude-ids.org/projects/prelude/files
@@ -21,6 +21,7 @@ Patch1:		%{name}-ruby.patch
 Patch2:		%{name}-gnutls.patch
 Patch3:		%{name}-gets.patch
 Patch4:		%{name}-python.patch
+Patch5:		format-security.patch
 URL:		http://www.prelude-ids.com/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
@@ -233,6 +234,7 @@ PreludeEasy - dowiązania języka Ruby do libprelude.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 sed -i -e 's/lua >= 5.1/lua51 >= 5.1/' configure.in
 
