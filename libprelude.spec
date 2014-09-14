@@ -353,14 +353,12 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{perl_vendorarch}/Prelude.pm
 %dir %{perl_vendorarch}/auto/Prelude
-%{perl_vendorarch}/auto/Prelude/Prelude.bs
 %attr(755,root,root) %{perl_vendorarch}/auto/Prelude/Prelude.so
 
 %files -n perl-PreludeEasy
 %defattr(644,root,root,755)
 %{perl_vendorarch}/PreludeEasy.pm
 %dir %{perl_vendorarch}/auto/PreludeEasy
-%{perl_vendorarch}/auto/PreludeEasy/PreludeEasy.bs
 %attr(755,root,root) %{perl_vendorarch}/auto/PreludeEasy/PreludeEasy.so
 %endif
 
