@@ -230,6 +230,10 @@ PreludeEasy - dowiązania języka Ruby do libprelude.
 %{__rm} bindings/ruby/PreludeEasy.cxx
 %patch1 -p1
 %endif
+%if %{with perl}
+# regenerate with fresh swig for perl 5.20
+%{__rm} bindings/low-level/perl/Prelude.c
+%endif
 
 %patch2 -p1
 %patch3 -p1
