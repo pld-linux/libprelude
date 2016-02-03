@@ -1,22 +1,24 @@
---- libprelude-1.0.1/bindings/low-level/python/Makefile.am~	2012-04-02 11:41:15.000000000 +0200
-+++ libprelude-1.0.1/bindings/low-level/python/Makefile.am	2015-12-27 20:54:02.339946498 +0100
-@@ -8,7 +8,7 @@
- 	CC="$(BINDINGS_CC)" $(PYTHON) setup.py build
+--- libprelude-1.2.6/bindings/python/Makefile.am.orig	2016-01-31 13:45:31.756628496 +0100
++++ libprelude-1.2.6/bindings/python/Makefile.am	2016-01-31 13:57:00.426599591 +0100
+@@ -10,17 +10,17 @@
  
+ python-build: _prelude.cxx
+ if HAVE_PYTHON2
+-	CC="$(CXX)" $(PYTHON2) setup.py build
++	CC="$(CXX)" $(PYTHON2) setup.py build --build-base=build-2
+ endif
+ if HAVE_PYTHON3
+-	CC="$(CXX)" $(PYTHON3) setup.py build
++	CC="$(CXX)" $(PYTHON3) setup.py build --build-base=build-3
+ endif
  install-exec-hook:
--	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-+	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --prefix=$(prefix)
- 
- uninstall-hook: 
- 	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
---- libprelude-1.0.1/bindings/python/Makefile.am~	2012-04-02 11:41:15.000000000 +0200
-+++ libprelude-1.0.1/bindings/python/Makefile.am	2015-12-27 20:53:20.153594859 +0100
-@@ -9,7 +9,7 @@
- 	CC="$(CXX)" $(PYTHON) setup.py build
- 
- install-exec-hook:
--	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-+	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --prefix=$(prefix)
+ if HAVE_PYTHON2
+-	$(PYTHON2) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
++	$(PYTHON2) setup.py build --build-base=build-2 install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --skip-build --prefix=$(prefix) --install-purelib=$(pythondir) --install-platlib=$(pyexecdir) --optimize=2
+ endif
+ if HAVE_PYTHON3
+-	$(PYTHON3) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
++	$(PYTHON3) setup.py build --build-base=build-3 install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --skip-build --prefix=$(prefix) --install-purelib=$(python3dir) --install-platlib=$(py3execdir) --optimize=2
+ endif
  
  uninstall-hook:
- 	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`

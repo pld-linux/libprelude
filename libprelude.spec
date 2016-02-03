@@ -1,30 +1,24 @@
 #
 # Conditional build:
-%bcond_without	lua	# Lua (5.1) bindings
-%bcond_without	perl	# Perl bindings
-%bcond_without	python	# Python bindings (required by prewikka)
-%bcond_without	ruby	# Ruby bindings
+%bcond_without	lua		# Lua (5.1) bindings
+%bcond_without	perl		# Perl bindings
+%bcond_without	python2		# Python 2.x bindings (required by prewikka)
+%bcond_without	python3		# Python 3.x bindings
+%bcond_without	ruby		# Ruby bindings
+%bcond_without	static_libs	# static libraries
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
-Version:	1.0.1
-Release:	13
+Version:	1.2.6
+Release:	1
 License:	GPL v2 or commercial
 Group:		Libraries
 # https://www.prelude-ids.org/projects/prelude/files
-Source0:	https://www.prelude-ids.org/attachments/download/241/%{name}-%{version}.tar.gz
-# Source0-md5:	dce1ea9f82cf436830567894e7ee622f
-Patch0:		%{name}-libtool.patch
-Patch1:		%{name}-ruby.patch
-Patch2:		%{name}-gnutls.patch
-Patch3:		%{name}-gets.patch
-Patch4:		%{name}-python.patch
-Patch5:		format-security.patch
-Patch6:		python-install.patch
-Patch7:		gcc5.patch
-Patch8:		swig.patch
+Source0:	https://www.prelude-ids.org/attachments/download/410/%{name}-%{version}.tar.gz
+# Source0-md5:	6a5aa32864ca6d74e1c7af0cdab7bf40
+Patch0:		python-install.patch
 URL:		http://www.prelude-ids.com/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
@@ -38,7 +32,8 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.0
 %{?with_lua:BuildRequires:	lua51-devel >= 5.1}
 %{?with_perl:BuildRequires:	perl-devel}
-%{?with_python:BuildRequires:	python-devel >= 1:2.5}
+%{?with_python2:BuildRequires:	python-devel >= 1:2.5}
+%{?with_python3:BuildRequires:	python3-devel >= 1:3.2}
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
@@ -165,6 +160,7 @@ Summary:	Prelude Perl module - low-level Perl binding for libprelude
 Summary(pl.UTF-8):	Moduł Perla Prelude - niskopoziomowe wiązanie Perla do libprelude
 Group:		Development/Languages/Perl
 Requires:	%{name}-libs = %{version}-%{release}
+Obsoletes:	perl-PreludeEasy
 
 %description -n perl-libprelude
 Prelude Perl module - low-level Perl binding for libprelude.
@@ -172,41 +168,30 @@ Prelude Perl module - low-level Perl binding for libprelude.
 %description -n perl-libprelude -l pl.UTF-8
 Moduł Perla Prelude - niskopoziomowe wiązanie Perla do libprelude.
 
-%package -n perl-PreludeEasy
-Summary:	PreludeEasy - high-level Perl binding for libprelude
-Summary(pl.UTF-8):	PreludeEasy - wysokopoziomowe wiązanie Perla do libprelude
-Group:		Development/Languages/Perl
-Requires:	%{name}-c++ = %{version}-%{release}
-
-%description -n perl-PreludeEasy
-PreludeEasy - high-level Perl binding for libprelude.
-
-%description -n perl-PreludeEasy -l pl.UTF-8
-PreludeEasy - wysokopoziomowe wiązanie Perla do libprelude.
-
 %package -n python-libprelude
-Summary:	Low-level Python binding for libprelude
-Summary(pl.UTF-8):	Niskopoziomowe wiązanie Pythona do libprelude
+Summary:	Low-level Python 2.x binding for libprelude
+Summary(pl.UTF-8):	Niskopoziomowe wiązanie Pythona 2.x do libprelude
+Group:		Development/Languages/Python
+Requires:	%{name}-libs = %{version}-%{release}
+Obsoletes:	python-PreludeEasy
+
+%description -n python-libprelude
+Low-level Python 2.x binding for libprelude.
+
+%description -n python-libprelude -l pl.UTF-8
+Niskopoziomowe wiązanie Pythona 2.x do libprelude.
+
+%package -n python3-libprelude
+Summary:	Low-level Python 3.x binding for libprelude
+Summary(pl.UTF-8):	Niskopoziomowe wiązanie Pythona 3.x do libprelude
 Group:		Development/Languages/Python
 Requires:	%{name}-libs = %{version}-%{release}
 
-%description -n python-libprelude
-Low-level Python binding for libprelude.
+%description -n python3-libprelude
+Low-level Python 3.x binding for libprelude.
 
-%description -n python-libprelude -l pl.UTF-8
-Niskopoziomowe wiązanie Pythona do libprelude.
-
-%package -n python-PreludeEasy
-Summary:	PreludeEasy - high-level Python binding for libprelude
-Summary(pl.UTF-8):	PreludeEasy - wysokopoziomowe wiązanie Pythona do libprelude
-Group:		Development/Languages/Python
-Requires:	%{name}-c++ = %{version}-%{release}
-
-%description -n python-PreludeEasy
-PreludeEasy - high-level Python binding for libprelude.
-
-%description -n python-PreludeEasy -l pl.UTF-8
-PreludeEasy - wysokopoziomowe wiązanie Pythona do libprelude.
+%description -n python3-libprelude -l pl.UTF-8
+Niskopoziomowe wiązanie Pythona 3.x do libprelude.
 
 %package -n ruby-prelude
 Summary:	PreludeEasy - libprelude Ruby bindings
@@ -224,29 +209,12 @@ PreludeEasy - dowiązania języka Ruby do libprelude.
 %setup -q
 %patch0 -p1
 
-%if %{with python}
-# regenerate with fresh swig for gcc 4.6+
-%{__rm} bindings/python/{_PreludeEasy.cxx,PreludeEasy.py}
-%endif
-%if %{with ruby}
-# same for ruby 1.9
-%{__rm} bindings/ruby/PreludeEasy.cxx
-%patch1 -p1
-%endif
-%if %{with perl}
-# regenerate with fresh swig for perl 5.20
-%{__rm} bindings/low-level/perl/Prelude.c
+%if %{with python3}
+# regenerate with fresh swig for python 3.5+
+%{__rm} bindings/python/{_prelude.cxx,prelude.py}
 %endif
 
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-
-sed -i -e 's/lua >= 5.1/lua51 >= 5.1/' configure.in
+%{__sed} -i -e 's/lua >= 5.1/lua51 >= 5.1/;s/lua -e/lua5.1 -e/' configure.in
 
 %build
 %{__libtoolize}
@@ -257,41 +225,50 @@ sed -i -e 's/lua >= 5.1/lua51 >= 5.1/' configure.in
 %configure \
 	am_cv_ruby_rbexecdir=%{ruby_vendorarchdir} \
 	--enable-gtk-doc \
-	--enable-static \
-	--with%{!?with_lua:out}-lua \
-	--with%{!?with_perl:out}-perl \
-	--with%{!?with_python:out}-python \
+	%{?with_static_libs:--enable-static} \
 	--with-html-dir=%{_gtkdocdir}/libprelude \
-	--with-perl-installdirs=vendor
+	--with-lua%{!?with_lua:=no} \
+	--with-perl%{!?with_perl:=no} \
+	--with-perl-installdirs=vendor \
+	--with-python%{!?with_python2:=no} \
+	--with-python3%{!?with_python3:=no} \
+	--with-swig
 
 %{__make}
 
-cd bindings/perl
-%{__make} clean
-%{__perl} Makefile.PL \
-        INSTALLDIRS=vendor \
-%{__make}
+#cd bindings/perl
+#%{__make} clean
+#%{__perl} Makefile.PL \
+#        INSTALLDIRS=vendor \
+#%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	pythondir=%{py_sitescriptdir} \
+	pyexecdir=%{py_sitedir} \
+	python3dir=%{py3_sitescriptdir} \
+	py3execdir=%{py3_sitedir}
 
-%{__make} -C bindings/perl install \
-	DESTDIR=$RPM_BUILD_ROOT
+#%{__make} -C bindings/perl install \
+#	DESTDIR=$RPM_BUILD_ROOT
 
 %if %{with lua}
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/PreludeEasy.{la,a}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/lua/5.1/prelude.la \
+	%{?with_static_libs:$RPM_BUILD_ROOT%{_libdir}/lua/5.1/prelude.a}
 %endif
-%if %{with python}
-%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
-%py_comp $RPM_BUILD_ROOT%{py_sitedir}
+%if %{with python2}
 %py_postclean
 %endif
 %if %{with ruby}
-%{__rm} $RPM_BUILD_ROOT%{ruby_vendorarchdir}/PreludeEasy.{la,a}
+%{__rm} $RPM_BUILD_ROOT%{ruby_vendorarchdir}/Prelude.la \
+	%{?with_static_libs:$RPM_BUILD_ROOT%{ruby_vendorarchdir}/Prelude.a}
 %endif
+
+# not useful in distro? (or -swig?)
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/libprelude/swig
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -319,7 +296,7 @@ rm -rf $RPM_BUILD_ROOT
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libprelude.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libprelude.so.2
+%attr(755,root,root) %ghost %{_libdir}/libprelude.so.23
 
 %files devel
 %defattr(644,root,root,755)
@@ -332,14 +309,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_gtkdocdir}/libprelude
 %{_pkgconfigdir}/libprelude.pc
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libprelude.a
+%endif
 
 %files c++
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libpreludecpp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libpreludecpp.so.0
+%attr(755,root,root) %ghost %{_libdir}/libpreludecpp.so.8
 
 %files c++-devel
 %defattr(644,root,root,755)
@@ -348,14 +327,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/libprelude/idmef*.hxx
 %{_includedir}/libprelude/prelude*.hxx
 
+%if %{with static_libs}
 %files c++-static
 %defattr(644,root,root,755)
 %{_libdir}/libpreludecpp.a
+%endif
 
 %if %{with lua}
 %files -n lua-prelude
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/PreludeEasy.so
+%attr(755,root,root) %{_libdir}/lua/5.1/prelude.so
 %endif
 
 %if %{with perl}
@@ -364,30 +345,27 @@ rm -rf $RPM_BUILD_ROOT
 %{perl_vendorarch}/Prelude.pm
 %dir %{perl_vendorarch}/auto/Prelude
 %attr(755,root,root) %{perl_vendorarch}/auto/Prelude/Prelude.so
-
-%files -n perl-PreludeEasy
-%defattr(644,root,root,755)
-%{perl_vendorarch}/PreludeEasy.pm
-%dir %{perl_vendorarch}/auto/PreludeEasy
-%attr(755,root,root) %{perl_vendorarch}/auto/PreludeEasy/PreludeEasy.so
 %endif
 
-%if %{with python}
+%if %{with python2}
 %files -n python-libprelude
 %defattr(644,root,root,755)
 %attr(755,root,root) %{py_sitedir}/_prelude.so
 %{py_sitedir}/prelude.py[co]
 %{py_sitedir}/prelude-%{version}-py*.egg-info
+%endif
 
-%files -n python-PreludeEasy
+%if %{with python3}
+%files -n python3-libprelude
 %defattr(644,root,root,755)
-%attr(755,root,root) %{py_sitedir}/_PreludeEasy.so
-%{py_sitedir}/PreludeEasy.py[co]
-%{py_sitedir}/PreludeEasy-%{version}-py*.egg-info
+%attr(755,root,root) %{py3_sitedir}/_prelude.cpython-*.so
+%{py3_sitedir}/prelude.py
+%{py3_sitedir}/__pycache__/prelude.cpython-*.py[co]
+%{py3_sitedir}/prelude-%{version}-py*.egg-info
 %endif
 
 %if %{with ruby}
 %files -n ruby-prelude
 %defattr(644,root,root,755)
-%attr(755,root,root) %{ruby_vendorarchdir}/PreludeEasy.so
+%attr(755,root,root) %{ruby_vendorarchdir}/Prelude.so
 %endif
