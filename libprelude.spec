@@ -21,7 +21,7 @@ Source0:	https://www.prelude-siem.org/attachments/download/410/%{name}-%{version
 Patch0:		python-install.patch
 URL:		https://www.prelude-siem.org/
 BuildRequires:	autoconf >= 2.59
-BuildRequires:	automake
+BuildRequires:	automake >= 1:1.9
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	gnutls-devel >= 1.0.17
