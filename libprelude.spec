@@ -16,10 +16,10 @@ Release:	1
 License:	GPL v2 or commercial
 Group:		Libraries
 # https://www.prelude-ids.org/projects/prelude/files
-Source0:	https://www.prelude-ids.org/attachments/download/410/%{name}-%{version}.tar.gz
+Source0:	https://www.prelude-siem.org/attachments/download/410/%{name}-%{version}.tar.gz
 # Source0-md5:	6a5aa32864ca6d74e1c7af0cdab7bf40
 Patch0:		python-install.patch
-URL:		http://www.prelude-ids.com/
+URL:		https://www.prelude-siem.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
 BuildRequires:	bison
