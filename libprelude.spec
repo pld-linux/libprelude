@@ -143,6 +143,19 @@ Static libpreludecpp library.
 %description c++-static -l pl.UTF-8
 Statyczna biblioteka libpreludecpp.
 
+%package swig
+Summary:	SWIG development files for libprelude
+Summary(pl.UTF-8):	Pliki programistyczne SWIG-a dla libprelude
+Group:		Development/Libraries
+Requires:	%{name}-c++-devel = %{version}-%{release}
+Requires:	swig
+
+%description swig
+SWIG development files for libprelude.
+
+%description swig -l pl.UTF-8
+Pliki programistyczne SWIG-a dla libprelude.
+
 %package -n lua-prelude
 Summary:	PreludeEasy - libprelude Lua bindings
 Summary(pl.UTF-8):	PreludeEasy - dowiązania języka Lua do libprelude
@@ -156,54 +169,54 @@ PreludeEasy - libprelude Lua bindings.
 PreludeEasy - dowiązania języka Lua do libprelude.
 
 %package -n perl-libprelude
-Summary:	Prelude Perl module - low-level Perl binding for libprelude
-Summary(pl.UTF-8):	Moduł Perla Prelude - niskopoziomowe wiązanie Perla do libprelude
+Summary:	Prelude Perl module - Perl binding for libprelude
+Summary(pl.UTF-8):	Moduł Perla Prelude - wiązanie Perla do libprelude
 Group:		Development/Languages/Perl
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-c++ = %{version}-%{release}
 Obsoletes:	perl-PreludeEasy
 
 %description -n perl-libprelude
-Prelude Perl module - low-level Perl binding for libprelude.
+Prelude Perl module - Perl binding for libprelude.
 
 %description -n perl-libprelude -l pl.UTF-8
-Moduł Perla Prelude - niskopoziomowe wiązanie Perla do libprelude.
+Moduł Perla Prelude - wiązanie Perla do libprelude.
 
 %package -n python-libprelude
-Summary:	Low-level Python 2.x binding for libprelude
-Summary(pl.UTF-8):	Niskopoziomowe wiązanie Pythona 2.x do libprelude
+Summary:	Python 2.x binding for libprelude
+Summary(pl.UTF-8):	Wiązanie Pythona 2.x do libprelude
 Group:		Development/Languages/Python
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-c++ = %{version}-%{release}
 Obsoletes:	python-PreludeEasy
 
 %description -n python-libprelude
-Low-level Python 2.x binding for libprelude.
+Python 2.x binding for libprelude.
 
 %description -n python-libprelude -l pl.UTF-8
-Niskopoziomowe wiązanie Pythona 2.x do libprelude.
+Wiązanie Pythona 2.x do libprelude.
 
 %package -n python3-libprelude
-Summary:	Low-level Python 3.x binding for libprelude
-Summary(pl.UTF-8):	Niskopoziomowe wiązanie Pythona 3.x do libprelude
+Summary:	Python 3.x binding for libprelude
+Summary(pl.UTF-8):	Wiązanie Pythona 3.x do libprelude
 Group:		Development/Languages/Python
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-c++ = %{version}-%{release}
 
 %description -n python3-libprelude
-Low-level Python 3.x binding for libprelude.
+Python 3.x binding for libprelude.
 
 %description -n python3-libprelude -l pl.UTF-8
-Niskopoziomowe wiązanie Pythona 3.x do libprelude.
+Wiązanie Pythona 3.x do libprelude.
 
 %package -n ruby-prelude
-Summary:	PreludeEasy - libprelude Ruby bindings
-Summary(pl.UTF-8):	PreludeEasy - dowiązania języka Ruby do libprelude
+Summary:	Ruby bindings for libprelude
+Summary(pl.UTF-8):	Wiązania języka Ruby do libprelude
 Group:		Development/Languages
 Requires:	%{name}-c++ = %{version}-%{release}
 
 %description -n ruby-prelude
-PreludeEasy - libprelude Ruby bindings.
+Ruby bindings for libprelude.
 
 %description -n ruby-prelude -l pl.UTF-8
-PreludeEasy - dowiązania języka Ruby do libprelude.
+Wiązania języka Ruby do libprelude.
 
 %prep
 %setup -q
@@ -236,12 +249,6 @@ PreludeEasy - dowiązania języka Ruby do libprelude.
 
 %{__make}
 
-#cd bindings/perl
-#%{__make} clean
-#%{__perl} Makefile.PL \
-#        INSTALLDIRS=vendor \
-#%{__make}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
@@ -251,9 +258,6 @@ rm -rf $RPM_BUILD_ROOT
 	pyexecdir=%{py_sitedir} \
 	python3dir=%{py3_sitescriptdir} \
 	py3execdir=%{py3_sitedir}
-
-#%{__make} -C bindings/perl install \
-#	DESTDIR=$RPM_BUILD_ROOT
 
 %if %{with lua}
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/lua/5.1/prelude.la \
@@ -266,9 +270,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__rm} $RPM_BUILD_ROOT%{ruby_vendorarchdir}/Prelude.la \
 	%{?with_static_libs:$RPM_BUILD_ROOT%{ruby_vendorarchdir}/Prelude.a}
 %endif
-
-# not useful in distro? (or -swig?)
-%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/libprelude/swig
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -332,6 +333,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/libpreludecpp.a
 %endif
+
+%files swig
+%defattr(644,root,root,755)
+%dir %{_datadir}/libprelude
+%{_datadir}/libprelude/swig
 
 %if %{with lua}
 %files -n lua-prelude
