@@ -243,7 +243,7 @@ Wiązania języka Ruby do libprelude.
 	--with-lua%{!?with_lua:=no} \
 	--with-perl%{!?with_perl:=no} \
 	--with-perl-installdirs=vendor \
-	--with-python%{!?with_python2:=no} \
+	--with-python2%{!?with_python2:=no} \
 	--with-python3%{!?with_python3:=no} \
 	--with-swig
 
