@@ -18,12 +18,12 @@ Version:	3.1.0
 Release:	1
 License:	GPL v2 or commercial
 Group:		Libraries
-#Source0Download: https://www.prelude-ids.org/projects/prelude/files
-Source0:	https://www.prelude-ids.org/attachments/download/721/%{name}-%{version}.tar.gz
+#Source0Download: https://www.prelude-siem.org/projects/prelude/files
+Source0:	https://www.prelude-siem.org/attachments/download/721/%{name}-%{version}.tar.gz
 # Source0-md5:	2e1a5d7cbf98a2d57fbb367a578dbf8c
 Patch0:		python-install.patch
 Patch1:		%{name}-lua.patch
-URL:		https://www.prelude-ids.org/
+URL:		https://www.prelude-siem.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
 BuildRequires:	bison
