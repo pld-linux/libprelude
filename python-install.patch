@@ -1,5 +1,5 @@
---- libprelude-1.2.6/bindings/python/Makefile.am.orig	2016-01-31 13:45:31.756628496 +0100
-+++ libprelude-1.2.6/bindings/python/Makefile.am	2016-01-31 13:57:00.426599591 +0100
+--- libprelude-3.1.0/bindings/python/Makefile.am.orig	2016-10-09 10:39:49.724308046 +0200
++++ libprelude-3.1.0/bindings/python/Makefile.am	2016-10-09 14:42:44.384141631 +0200
 @@ -10,17 +10,17 @@
  
  python-build: _prelude.cxx
@@ -13,12 +13,12 @@
  endif
  install-exec-hook:
  if HAVE_PYTHON2
--	$(PYTHON2) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-+	$(PYTHON2) setup.py build --build-base=build-2 install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --skip-build --prefix=$(prefix) --install-purelib=$(pythondir) --install-platlib=$(pyexecdir) --optimize=2
+-	$(PYTHON2) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --prefix @prefix@
++	$(PYTHON2) setup.py build --build-base=build-2 install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --skip-build --prefix @prefix@ --install-purelib $(pythondir) --install-platlib $(pyexecdir) --optimize=2
  endif
  if HAVE_PYTHON3
--	$(PYTHON3) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-+	$(PYTHON3) setup.py build --build-base=build-3 install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --skip-build --prefix=$(prefix) --install-purelib=$(python3dir) --install-platlib=$(py3execdir) --optimize=2
+-	$(PYTHON3) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --prefix @prefix@
++	$(PYTHON3) setup.py build --build-base=build-3 install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --skip-build --prefix @prefix@ --install-purelib $(python3dir) --install-platlib $(py3execdir) --optimize=2
  endif
  
  uninstall-hook:

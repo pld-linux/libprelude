@@ -7,19 +7,23 @@
 %bcond_without	ruby		# Ruby bindings
 %bcond_without	static_libs	# static libraries
 #
+# 5.1 also possible, 5.2 is preferred
+%define	lua_ver	5.2
+%define	lua_pkg	lua%(echo %{lua_ver} | tr -d .)
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
-Version:	1.2.6
-Release:	3
+Version:	3.1.0
+Release:	1
 License:	GPL v2 or commercial
 Group:		Libraries
-# https://www.prelude-ids.org/projects/prelude/files
-Source0:	https://www.prelude-siem.org/attachments/download/410/%{name}-%{version}.tar.gz
-# Source0-md5:	6a5aa32864ca6d74e1c7af0cdab7bf40
+#Source0Download: https://www.prelude-ids.org/projects/prelude/files
+Source0:	https://www.prelude-ids.org/attachments/download/721/%{name}-%{version}.tar.gz
+# Source0-md5:	2e1a5d7cbf98a2d57fbb367a578dbf8c
 Patch0:		python-install.patch
-URL:		https://www.prelude-siem.org/
+Patch1:		%{name}-lua.patch
+URL:		https://www.prelude-ids.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
 BuildRequires:	bison
@@ -30,7 +34,7 @@ BuildRequires:	libgcrypt-devel >= 1.1.94
 BuildRequires:	libltdl-devel >= 2:2.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.0
-%{?with_lua:BuildRequires:	lua51-devel >= 5.1}
+%{?with_lua:BuildRequires:	%{lua_pkg}-devel >= %{lua_ver}}
 %{?with_perl:BuildRequires:	perl-devel}
 %{?with_python2:BuildRequires:	python-devel >= 1:2.5}
 %{?with_python3:BuildRequires:	python3-devel >= 1:3.2}
@@ -161,6 +165,7 @@ Summary:	PreludeEasy - libprelude Lua bindings
 Summary(pl.UTF-8):	PreludeEasy - dowiązania języka Lua do libprelude
 Group:		Development/Languages
 Requires:	%{name}-c++ = %{version}-%{release}
+Requires:	%{lua_pkg} >= %{lua_ver}
 
 %description -n lua-prelude
 PreludeEasy - libprelude Lua bindings.
@@ -221,13 +226,12 @@ Wiązania języka Ruby do libprelude.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %if %{with python3}
 # regenerate with fresh swig for python 3.5+
 %{__rm} bindings/python/{_prelude.cxx,prelude.py}
 %endif
-
-%{__sed} -i -e 's/lua >= 5.1/lua51 >= 5.1/;s/lua -e/lua5.1 -e/' configure.in
 
 %build
 %{__libtoolize}
@@ -260,8 +264,8 @@ rm -rf $RPM_BUILD_ROOT
 	py3execdir=%{py3_sitedir}
 
 %if %{with lua}
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/lua/5.1/prelude.la \
-	%{?with_static_libs:$RPM_BUILD_ROOT%{_libdir}/lua/5.1/prelude.a}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/lua/%{lua_ver}/prelude.la \
+	%{?with_static_libs:$RPM_BUILD_ROOT%{_libdir}/lua/%{lua_ver}/prelude.a}
 %endif
 %if %{with python2}
 %py_postclean
@@ -309,6 +313,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_aclocaldir}/libprelude.m4
 %{_gtkdocdir}/libprelude
 %{_pkgconfigdir}/libprelude.pc
+%{_mandir}/man1/libprelude-config.1*
 
 %if %{with static_libs}
 %files static
@@ -342,7 +347,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with lua}
 %files -n lua-prelude
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lua/5.1/prelude.so
+%attr(755,root,root) %{_libdir}/lua/%{lua_ver}/prelude.so
 %endif
 
 %if %{with perl}
