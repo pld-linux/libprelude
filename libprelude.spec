@@ -15,7 +15,7 @@ Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
 Version:	3.1.0
-Release:	8
+Release:	9
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: https://www.prelude-siem.org/projects/prelude/files
@@ -234,6 +234,7 @@ Wiązania języka Ruby do libprelude.
 %endif
 
 %build
+%{__gtkdocize}
 %{__libtoolize}
 %{__aclocal} -I m4 -I libmissing/m4
 %{__autoconf}
