@@ -34,6 +34,7 @@ BuildRequires:	libgcrypt-devel >= 1.1.94
 BuildRequires:	libltdl-devel >= 2:2.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.0
+%{?with_lua:BuildRequires:	%{lua_pkg} >= %{lua_ver}}
 %{?with_lua:BuildRequires:	%{lua_pkg}-devel >= %{lua_ver}}
 %{?with_perl:BuildRequires:	perl-devel}
 %{?with_python2:BuildRequires:	python-devel >= 1:2.5}
