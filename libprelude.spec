@@ -14,13 +14,13 @@
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
-Version:	3.1.0
-Release:	10
+Version:	4.1.0
+Release:	1
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: https://www.prelude-siem.org/projects/prelude/files
-Source0:	https://www.prelude-siem.org/attachments/download/721/%{name}-%{version}.tar.gz
-# Source0-md5:	2e1a5d7cbf98a2d57fbb367a578dbf8c
+Source0:	https://www.prelude-siem.org/attachments/download/831/%{name}-%{version}.tar.gz
+# Source0-md5:	d75977db58de9ba4cf9c4d00a0e25cb9
 Patch0:		python-install.patch
 Patch1:		%{name}-lua.patch
 URL:		https://www.prelude-siem.org/
