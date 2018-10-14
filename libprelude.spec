@@ -15,7 +15,7 @@ Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
 Version:	4.1.0
-Release:	4
+Release:	5
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: https://www.prelude-siem.org/projects/prelude/files
@@ -28,6 +28,7 @@ BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
 BuildRequires:	bison
 BuildRequires:	flex
+BuildRequires:	gnulib >= 0-0.20181013.2
 BuildRequires:	gnutls-devel >= 1.0.17
 BuildRequires:	gtk-doc >= 1.0
 BuildRequires:	libgcrypt-devel >= 1.1.94
@@ -235,6 +236,8 @@ Wiązania języka Ruby do libprelude.
 %endif
 
 %build
+gnulib-tool --copy-file lib/fseeko.c libmissing/fseeko.c
+gnulib-tool --copy-file m4/fseeko.m4 libmissing/m4/fseeko.m4
 %{__gtkdocize}
 %{__libtoolize}
 %{__aclocal} -I m4 -I libmissing/m4
