@@ -14,15 +14,16 @@
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
-Version:	4.1.0
-Release:	7
+Version:	5.1.1
+Release:	1
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: https://www.prelude-siem.org/projects/prelude/files
-Source0:	https://www.prelude-siem.org/attachments/download/831/%{name}-%{version}.tar.gz
-# Source0-md5:	d75977db58de9ba4cf9c4d00a0e25cb9
+Source0:	https://www.prelude-siem.org/attachments/download/1181/%{name}-%{version}.tar.gz
+# Source0-md5:	9302c68e1c84a847f77574ab048177e6
 Patch0:		python-install.patch
 Patch1:		%{name}-lua.patch
+Patch2:		gtk-doc-1.32.patch
 URL:		https://www.prelude-siem.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
@@ -229,6 +230,7 @@ Wiązania języka Ruby do libprelude.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %if %{with python3}
 # regenerate with fresh swig for python 3.5+
@@ -306,7 +308,7 @@ rm -rf $RPM_BUILD_ROOT
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libprelude.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libprelude.so.23
+%attr(755,root,root) %ghost %{_libdir}/libprelude.so.28
 
 %files devel
 %defattr(644,root,root,755)
@@ -329,7 +331,7 @@ rm -rf $RPM_BUILD_ROOT
 %files c++
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libpreludecpp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libpreludecpp.so.8
+%attr(755,root,root) %ghost %{_libdir}/libpreludecpp.so.12
 
 %files c++-devel
 %defattr(644,root,root,755)

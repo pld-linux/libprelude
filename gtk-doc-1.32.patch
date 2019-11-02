@@ -1,0 +1,11 @@
+--- libprelude-5.1.1/docs/api/libprelude-docs.xml~	2019-10-14 22:33:02.000000000 +0200
++++ libprelude-5.1.1/docs/api/libprelude-docs.xml	2019-11-02 22:39:54.473081949 +0100
+@@ -53,7 +53,7 @@
+   </chapter>
+   <chapter id="object-tree">
+     <title>Object Hierarchy</title>
+-     <xi:include href="xml/tree_index.sgml"/>
++     <xi:include href="xml/object_index.sgml"/>
+   </chapter>
+   <index id="api-index-full">
+     <title>API Index</title>
