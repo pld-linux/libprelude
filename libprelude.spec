@@ -15,7 +15,7 @@ Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
 Version:	5.1.1
-Release:	2
+Release:	3
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: https://www.prelude-siem.org/projects/prelude/files
@@ -24,6 +24,7 @@ Source0:	https://www.prelude-siem.org/attachments/download/1181/%{name}-%{versio
 Patch0:		python-install.patch
 Patch1:		%{name}-lua.patch
 Patch2:		gtk-doc-1.32.patch
+Patch3:		python-3.8-fix.patch
 URL:		https://www.prelude-siem.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
@@ -231,6 +232,7 @@ Wiązania języka Ruby do libprelude.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %if %{with python3}
 # regenerate with fresh swig for python 3.5+
