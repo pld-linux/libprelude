@@ -10,7 +10,6 @@
 # 5.1 also possible, 5.2 is preferred
 %define	lua_ver	5.2
 %define	lua_pkg	lua%(echo %{lua_ver} | tr -d .)
-%include	/usr/lib/rpm/macros.perl
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
