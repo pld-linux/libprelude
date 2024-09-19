@@ -13,31 +13,30 @@
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
-Version:	5.1.1
-Release:	13
+Version:	5.2.0
+Release:	1
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: https://www.prelude-siem.org/projects/prelude/files
-Source0:	https://www.prelude-siem.org/attachments/download/1181/%{name}-%{version}.tar.gz
-# Source0-md5:	9302c68e1c84a847f77574ab048177e6
+Source0:	https://www.prelude-siem.org/attachments/download/1395/%{name}-%{version}.tar.gz
+# Source0-md5:	4db429af160450dc37c7ade001abf8c4
 Patch0:		python-install.patch
 Patch1:		%{name}-lua.patch
 Patch2:		gtk-doc-1.32.patch
-Patch3:		python-3.8-fix.patch
 URL:		https://www.prelude-siem.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	gnulib >= 0-0.20181013.2
-BuildRequires:	gnutls-devel >= 1.0.17
+BuildRequires:	gnutls-devel >= 2.12.0
 BuildRequires:	gtk-doc >= 1.0
-BuildRequires:	libgcrypt-devel >= 1.1.94
 BuildRequires:	libltdl-devel >= 2:2.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.0
 %{?with_lua:BuildRequires:	%{lua_pkg} >= %{lua_ver}}
 %{?with_lua:BuildRequires:	%{lua_pkg}-devel >= %{lua_ver}}
+BuildRequires:	pcre-devel
 %{?with_perl:BuildRequires:	perl-devel}
 %{?with_python2:BuildRequires:	python-devel >= 1:2.5}
 %{?with_python3:BuildRequires:	python3-devel >= 1:3.2}
@@ -46,9 +45,9 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.745
 %{?with_ruby:BuildRequires:	ruby-devel >= 1.9}
 BuildRequires:	sed >= 4.0
-%{?with_perl:BuildRequires: swig-perl}
-%{?with_python:BuildRequires: swig-python}
-%{?with_ruby:BuildRequires: swig-ruby}
+%{?with_perl:BuildRequires: swig-perl >= 4.0.1}
+%{?with_python:BuildRequires: swig-python >= 4.0.1}
+%{?with_ruby:BuildRequires: swig-ruby >= 4.0.1}
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -76,8 +75,7 @@ program związany z bezpieczeństwem na czujnik Prelude.
 Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Group:		Libraries
-Requires:	gnutls >= 1.0.17
-Requires:	libgcrypt >= 1.1.94
+Requires:	gnutls >= 2.12.0
 
 %description libs
 The Prelude library.
@@ -90,9 +88,9 @@ Summary:	Header files and development documentation for libprelude
 Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja programistyczna dla libprelude
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	gnutls-devel >= 1.0.17
-Requires:	libgcrypt-devel >= 1.1.94
+Requires:	gnutls-devel >= 2.12.0
 Requires:	libltdl-devel
+Requires:	pcre-devel
 
 %description devel
 Header files and development documentation for libprelude.
@@ -181,7 +179,7 @@ Summary:	Prelude Perl module - Perl binding for libprelude
 Summary(pl.UTF-8):	Moduł Perla Prelude - wiązanie Perla do libprelude
 Group:		Development/Languages/Perl
 Requires:	%{name}-c++ = %{version}-%{release}
-Obsoletes:	perl-PreludeEasy
+Obsoletes:	perl-PreludeEasy < 1.2
 
 %description -n perl-libprelude
 Prelude Perl module - Perl binding for libprelude.
@@ -194,7 +192,7 @@ Summary:	Python 2.x binding for libprelude
 Summary(pl.UTF-8):	Wiązanie Pythona 2.x do libprelude
 Group:		Development/Languages/Python
 Requires:	%{name}-c++ = %{version}-%{release}
-Obsoletes:	python-PreludeEasy
+Obsoletes:	python-PreludeEasy < 1.2
 
 %description -n python-libprelude
 Python 2.x binding for libprelude.
@@ -231,12 +229,12 @@ Wiązania języka Ruby do libprelude.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
-%if %{with python3}
-# regenerate with fresh swig for python 3.5+
-%{__rm} bindings/python/{_prelude.cxx,prelude.py}
-%endif
+# in case swig regeneration is required:
+#%{__rm} bindings/python/{_prelude.cxx,prelude.py}
+# but note that the directory contains modified pystrings.swg from swig
+# (4.0.1 as of libprelude 5.2.0), which might be incompatible with system swig
+# (e.g. 4.0.x vs 4.2.x)
 
 %build
 gnulib-tool --copy-file lib/fseeko.c libmissing/fseeko.c
