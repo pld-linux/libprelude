@@ -1,0 +1,11 @@
+--- libprelude-5.2.0/src/idmef-class.c.orig	2020-09-09 16:30:32.666000000 +0200
++++ libprelude-5.2.0/src/idmef-class.c	2024-09-19 19:31:33.449921470 +0200
+@@ -161,7 +161,7 @@ const char **idmef_class_get_child_attri
+ 
+         ret = is_child_valid(class, child);
+         if ( ret < 0 )
+-                return ret;
++                return NULL;
+ 
+         return object_data[class].children_list[child].attributes;
+ }

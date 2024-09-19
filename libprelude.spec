@@ -23,6 +23,7 @@ Source0:	https://www.prelude-siem.org/attachments/download/1395/%{name}-%{versio
 Patch0:		python-install.patch
 Patch1:		%{name}-lua.patch
 Patch2:		gtk-doc-1.32.patch
+Patch3:		%{name}-cast.patch
 URL:		https://www.prelude-siem.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
@@ -229,6 +230,7 @@ Wiązania języka Ruby do libprelude.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # in case swig regeneration is required:
 #%{__rm} bindings/python/{_prelude.cxx,prelude.py}
