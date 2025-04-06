@@ -1,0 +1,23 @@
+Avoid rebuilding swig (not compatible with upstream version)
+#--- libprelude-5.2.0/bindings/python/libpreludecpp-python.i.orig	2020-09-09 16:30:32.510000000 +0200
+#+++ libprelude-5.2.0/bindings/python/libpreludecpp-python.i	2025-04-06 17:00:10.480012421 +0200
+#@@ -86,7 +86,7 @@ static void _cb_python_log(int level, co
+#         SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+# 
+#         arglist = Py_BuildValue("(i,s)", level, str);
+#-        result = PyEval_CallObject(__prelude_log_func, arglist);
+#+        result = PyObject_CallObject(__prelude_log_func, arglist);
+# 
+#         Py_DECREF(arglist);
+#         Py_XDECREF(result);
+--- libprelude-5.2.0/bindings/python/_prelude.cxx.orig	2020-09-09 16:30:32.510000000 +0200
++++ libprelude-5.2.0/bindings/python/_prelude.cxx	2025-04-06 17:24:12.589469239 +0200
+@@ -4112,7 +4112,7 @@ static void _cb_python_log(int level, co
+         SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+ 
+         arglist = Py_BuildValue("(i,s)", level, str);
+-        result = PyEval_CallObject(__prelude_log_func, arglist);
++        result = PyObject_CallObject(__prelude_log_func, arglist);
+ 
+         Py_DECREF(arglist);
+         Py_XDECREF(result);

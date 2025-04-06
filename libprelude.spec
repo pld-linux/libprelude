@@ -14,7 +14,7 @@ Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
 Version:	5.2.0
-Release:	3
+Release:	4
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: https://www.prelude-siem.org/projects/prelude/files
@@ -24,6 +24,7 @@ Patch0:		python-install.patch
 Patch1:		%{name}-lua.patch
 Patch2:		gtk-doc-1.32.patch
 Patch3:		%{name}-cast.patch
+Patch4:		%{name}-python.patch
 URL:		https://www.prelude-siem.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.9
@@ -231,6 +232,7 @@ Wiązania języka Ruby do libprelude.
 %patch -P 1 -p1
 %patch -P 2 -p1
 %patch -P 3 -p1
+%patch -P 4 -p1
 
 # in case swig regeneration is required:
 #%{__rm} bindings/python/{_prelude.cxx,prelude.py}
@@ -247,7 +249,9 @@ gnulib-tool --copy-file m4/fseeko.m4 libmissing/m4/fseeko.m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+# ac_cv_prog_HAVE_CXX=yes is a hack for some broken check
 %configure \
+	ac_cv_prog_HAVE_CXX=yes \
 	am_cv_ruby_rbexecdir=%{ruby_vendorarchdir} \
 	--enable-gtk-doc \
 	%{?with_static_libs:--enable-static} \
