@@ -2,9 +2,9 @@
 # Conditional build:
 %bcond_without	lua		# Lua (5.1) bindings
 %bcond_without	perl		# Perl bindings
-%bcond_without	python2		# Python 2.x bindings (required by prewikka)
+%bcond_with	python2		# Python 2.x bindings (required by prewikka)
 %bcond_without	python3		# Python 3.x bindings
-%bcond_without	ruby		# Ruby bindings
+%bcond_with	ruby		# Ruby bindings
 %bcond_without	static_libs	# static libraries
 #
 # 5.1 also possible, 5.2 is preferred
@@ -14,7 +14,7 @@ Summary:	The Prelude library
 Summary(pl.UTF-8):	Biblioteka Prelude
 Name:		libprelude
 Version:	5.2.0
-Release:	5
+Release:	6
 License:	GPL v2 or commercial
 Group:		Libraries
 #Source0Download: https://www.prelude-siem.org/projects/prelude/files
@@ -261,6 +261,7 @@ gnulib-tool --copy-file m4/fseeko.m4 libmissing/m4/fseeko.m4
 	--with-perl-installdirs=vendor \
 	--with-python2%{!?with_python2:=no} \
 	--with-python3%{!?with_python3:=no} \
+	--with-ruby%{!?with_ruby:=no} \
 	--with-swig
 
 %{__make}
